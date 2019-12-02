@@ -1,11 +1,15 @@
+using System;
 using System.IO;
 using AdventOfCode._1;
+
 using Xunit;
 
 namespace AdventOfCode.Tests._1
 {
-    public class OneTests
+    public class OneTests : IDisposable
     {
+        private StreamReader _streamReader;
+
         [Theory]
         [InlineData(2, 12)]
         [InlineData(2, 14)]
@@ -21,21 +25,17 @@ namespace AdventOfCode.Tests._1
         public void Should_ReturnCorrectSum()
         {
             var expectedFuel = 2 + 2 + 654 + 33583;
-            using (var input = new MemoryStream())
-            {
-                var writer = new StreamWriter(input);
-                writer.WriteLine("12");
-                writer.WriteLine("14");
-                writer.WriteLine("1969");
-                writer.WriteLine("100756");
-                writer.Flush();
+            _streamReader = StreamHelper.GetStream("12", "14", "1969", "100756");
 
-                input.Seek(0, SeekOrigin.Begin);
+            var fuel = new One().Run(_streamReader);
 
-                var fuel = new One().Run(new StreamReader(input));
+            Assert.Equal(expectedFuel.ToString(), fuel);
+        }
 
-                Assert.Equal(expectedFuel, fuel);
-            }
+        public void Dispose()
+        {
+            _streamReader?.Dispose();
+            _streamReader = null;
         }
     }
 }

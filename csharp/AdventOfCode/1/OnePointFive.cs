@@ -2,17 +2,9 @@
 
 namespace AdventOfCode._1
 {
-    public class OnePointFive : IRunnable
+    public class OnePointFive : BaseRunnable
     {
-        public string Run(string[] args)
-        {
-            using (var input = File.OpenText(args[1]))
-            {
-                return Run(input).ToString();
-            }
-        }
-
-        public long Run(StreamReader reader)
+        public override string Run(StreamReader reader)
         {
             long sum = 0;
             string line;
@@ -22,7 +14,7 @@ namespace AdventOfCode._1
                 sum += ComputeRequiredFuel(mass);
             }
 
-            return sum;
+            return sum.ToString();
         }
 
         public int ComputeRequiredFuel(int mass)
