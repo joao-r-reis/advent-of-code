@@ -4,17 +4,18 @@ using System.Reflection;
 
 using AdventOfCode._1;
 using AdventOfCode._2;
+using AdventOfCode._3;
 
 namespace AdventOfCode
 {
     public class Program
     {
-        public const string DefaultTypeToRun = nameof(TwoPointFive);
+        public const string DefaultTypeToRun = nameof(ThreePointFive);
 
         public static readonly string[] DefaultArgs = new[]
         {
             DefaultTypeToRun,
-            "2\\input.txt"
+            "3\\input.txt"
         };
 
         public static void Main(string[] args)

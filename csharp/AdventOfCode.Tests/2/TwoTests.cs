@@ -7,10 +7,8 @@ using Xunit;
 
 namespace AdventOfCode.Tests._2
 {
-    public class TwoTests : IDisposable
+    public class TwoTests
     {
-        private StreamReader _streamReader;
-
         [Theory]
         [InlineData(new[] { 1, 0, 0, 0, 99 }, new[] { 2, 0, 0, 0, 99 })]
         [InlineData(new[] { 2, 3, 0, 3, 99 }, new[] { 2, 3, 0, 6, 99 })]
@@ -44,11 +42,6 @@ namespace AdventOfCode.Tests._2
             var result = new Two().ComputeWithInputAndGetOutput(data, 12, 2);
 
             Assert.Equal(3716293, result);
-        }
-
-        public void Dispose()
-        {
-            _streamReader?.Dispose();
         }
     }
 }
