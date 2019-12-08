@@ -1,12 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.Concurrent;
 
 namespace AdventOfCode.IntCodeComputer.Commands
 {
     public class Input : BaseCommand
     {
-        private readonly Queue<int> _input;
+        private readonly BlockingCollection<int> _input;
 
-        public Input(Queue<int> input)
+        public Input(BlockingCollection<int> input)
         {
             _input = input;
         }
@@ -15,7 +15,7 @@ namespace AdventOfCode.IntCodeComputer.Commands
 
         public override bool Process(int[] data, int[] parameterModes, ref int offset)
         {
-            var input = _input.Dequeue();
+            var input = _input.Take();
             var value = data[offset++];
             data[value] = input;
             return false;

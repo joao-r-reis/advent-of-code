@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.Concurrent;
 using AdventOfCode.IntCodeComputer;
 
 namespace AdventOfCode._5
@@ -13,9 +13,9 @@ namespace AdventOfCode._5
         {
         }
 
-        protected override IIntCodeProgram CreateIntCodeProgram(Queue<int> input, out Queue<int> output)
+        protected override IIntCodeProgram CreateIntCodeProgram(BlockingCollection<int> input)
         {
-            return IntCodeProgram.NewDay5PointFive(input, out output);
+            return IntCodeProgram.NewDay5PointFive(input);
         }
     }
 }

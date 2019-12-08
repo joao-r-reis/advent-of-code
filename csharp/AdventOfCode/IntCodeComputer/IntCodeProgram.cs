@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
 using AdventOfCode.IntCodeComputer.Commands;
 
@@ -13,26 +14,31 @@ namespace AdventOfCode.IntCodeComputer
             return new IntCodeProgram(new Halt(), new Multiply(), new Sum());
         }
 
-        public static IIntCodeProgram NewDay5(Queue<int> input, out Queue<int> output)
+        public static IIntCodeProgram NewDay5(BlockingCollection<int> input)
         {
-            var outputCmd = new Output();
-            output = outputCmd.OutputQueue;
             return new IntCodeProgram(
-                new Halt(), new Multiply(), new Sum(), new Input(input), outputCmd);
+                new Halt(), new Multiply(), new Sum(), new Input(input), new Output());
         }
 
-        public static IIntCodeProgram NewDay5PointFive(Queue<int> input, out Queue<int> output)
+        public static IIntCodeProgram NewDay5PointFive(BlockingCollection<int> input)
         {
-            var outputCmd = new Output();
-            output = outputCmd.OutputQueue;
             return new IntCodeProgram(
-                new Halt(), new Multiply(), new Sum(), new Input(input), outputCmd, new JumpIfFalse(), new JumpIfTrue(), new LessThan(), new Equals());
+                new Halt(), new Multiply(), new Sum(), new Input(input), new Output(), new JumpIfFalse(), new JumpIfTrue(), new LessThan(), new Equals());
+        }
+
+        public static IIntCodeProgram NewDay7PointFive(BlockingCollection<int> input, BlockingCollection<int> output)
+        {
+            return new IntCodeProgram(
+                new Halt(), new Multiply(), new Sum(), new Input(input), new Output(output), new JumpIfFalse(), new JumpIfTrue(), new LessThan(), new Equals());
         }
 
         private IntCodeProgram(params ICommand[] commands)
         {
+            Output = ((Output) commands.SingleOrDefault(cmd => cmd is Output))?.OutputQueue;
             _commands = commands.ToDictionary(cmd => cmd.OpCode, cmd => cmd);
         }
+
+        public BlockingCollection<int> Output { get; }
 
         public int[] Compute(int[] data)
         {
