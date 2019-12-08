@@ -1,45 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿using System.Collections.Generic;
 using AdventOfCode.IntCodeComputer;
 
 namespace AdventOfCode._5
 {
-    public class FivePointFive : BaseRunnable
+    public class FivePointFive : Five
     {
-        private readonly int _input;
-
-        public FivePointFive(int input)
+        public FivePointFive() : base(5)
         {
-            _input = input;
         }
 
-        public FivePointFive() : this(5) { }
-
-        public override string Run(StreamReader reader)
+        public FivePointFive(int input) : base(input)
         {
-            var data = Parse(reader);
-            var input = new Queue<int>(new[] { _input });
-            IntCodeProgram.NewDay5PointFive(input, out var output).Compute(data);
-            var outputCodes = output.ToArray();
-            if (outputCodes.SkipLast(1).Any(code => code != 0))
-            {
-                throw new InvalidOperationException("Found non zero output code.");
-            }
-
-            if (!outputCodes.Any())
-            {
-                return "null";
-            }
-
-            return outputCodes.Last().ToString();
         }
 
-        private int[] Parse(StreamReader reader)
+        protected override IIntCodeProgram CreateIntCodeProgram(Queue<int> input, out Queue<int> output)
         {
-            var text = reader.ReadToEnd();
-            return text.Split(",").Select(int.Parse).ToArray();
+            return IntCodeProgram.NewDay5PointFive(input, out output);
         }
     }
 }
