@@ -1,8 +1,7 @@
-using System;
-using System.IO;
 using System.Linq;
-using AdventOfCode._2;
 
+using AdventOfCode.IntCodeComputer;
+using AdventOfCode._2;
 using Xunit;
 
 namespace AdventOfCode.Tests._2
@@ -16,7 +15,7 @@ namespace AdventOfCode.Tests._2
         [InlineData(new[] { 1, 1, 1, 4, 99, 5, 6, 0, 99 }, new[] { 30, 1, 1, 4, 2, 5, 6, 0, 99 })]
         public void Should_ReturnCorrectResult(int[] data, int[] expected)
         {
-            var result = new Two().Compute(data);
+            var result = IntCodeProgram.NewDay2().Compute(data);
             Assert.Equal(expected, result);
         }
 
