@@ -1,28 +1,31 @@
-﻿using System;
-
-namespace AdventOfCode.IntCodeComputer
+﻿namespace AdventOfCode.IntCodeComputer
 {
     public abstract class BaseCommand : ICommand
     {
-        public const int PositionMode = 0;
-        public const int ImmediateMode = 1;
+        private readonly IParameterComputer _parameterComputer;
 
-        protected int FetchParameter(int[] data, int parsedValue, int[] parameterModes, int parameterIndex)
+        protected BaseCommand(IParameterComputer parameterComputer)
         {
-            var parameterMode = parameterIndex >= parameterModes.Length ? PositionMode : parameterModes[parameterIndex];
-            switch (parameterMode)
-            {
-                case PositionMode:
-                    return data[parsedValue];
-                case ImmediateMode:
-                    return parsedValue;
-                default:
-                    throw new ArgumentException("Invalid parameter mode");
-            }
+            _parameterComputer = parameterComputer;
         }
 
-        public abstract int OpCode { get; }
+        protected IntCodeValue ReadData(IIntCodeData data, IntCodeValue parsedParameterValue, int[] parameterModes, int parameterIndex)
+        {
+            return _parameterComputer.FetchParameter(data, parsedParameterValue, GetParameterMode(parameterModes, parameterIndex));
+        }
 
-        public abstract bool Process(int[] data, int[] parameterModes, ref int offset);
+        protected void WriteData(IIntCodeData data, IntCodeValue valueToBeWritten, IntCodeValue parsedParameterValue, int[] parameterModes, int parameterIndex)
+        {
+            _parameterComputer.WriteParameter(data, valueToBeWritten, parsedParameterValue, GetParameterMode(parameterModes, parameterIndex));
+        }
+
+        private int? GetParameterMode(int[] parameterModes, int parameterIndex)
+        {
+            return parameterIndex >= parameterModes.Length ? (int?)null : parameterModes[parameterIndex];
+        }
+
+        public abstract IntCodeValue OpCode { get; }
+
+        public abstract bool Process(IIntCodeData data, int[] parameterModes, ref IntCodeValue offset);
     }
 }

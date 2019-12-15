@@ -2,14 +2,18 @@
 {
     public class JumpIfFalse : BaseCommand
     {
-        public override int OpCode => 6;
-
-        public override bool Process(int[] data, int[] parameterModes, ref int offset)
+        public JumpIfFalse(IParameterComputer parameterComputer) : base(parameterComputer)
         {
-            var parameter1 = FetchParameter(data, data[offset++], parameterModes, 0);
-            var parameter2 = FetchParameter(data, data[offset++], parameterModes, 1);
+        }
 
-            if (parameter1 == 0)
+        public override IntCodeValue OpCode => IntCodeValue.FromInt(6);
+
+        public override bool Process(IIntCodeData data, int[] parameterModes, ref IntCodeValue offset)
+        {
+            var parameter1 = ReadData(data, data[offset++], parameterModes, 0);
+            var parameter2 = ReadData(data, data[offset++], parameterModes, 1);
+
+            if (parameter1 == IntCodeValue.FromInt(0))
             {
                 offset = parameter2;
             }

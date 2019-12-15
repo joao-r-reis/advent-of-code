@@ -2,20 +2,24 @@
 {
     public class Equals : BaseCommand
     {
-        public override int OpCode => 8;
-
-        public override bool Process(int[] data, int[] parameterModes, ref int offset)
+        public Equals(IParameterComputer parameterComputer) : base(parameterComputer)
         {
-            var parameter1 = FetchParameter(data, data[offset++], parameterModes, 0);
-            var parameter2 = FetchParameter(data, data[offset++], parameterModes, 1);
+        }
 
-            var value = 0;
+        public override IntCodeValue OpCode => IntCodeValue.FromInt(8);
+
+        public override bool Process(IIntCodeData data, int[] parameterModes, ref IntCodeValue offset)
+        {
+            var parameter1 = ReadData(data, data[offset++], parameterModes, 0);
+            var parameter2 = ReadData(data, data[offset++], parameterModes, 1);
+
+            var value = IntCodeValue.FromInt(0);
             if (parameter1 == parameter2)
             {
-                value = 1;
+                value = IntCodeValue.FromInt(1);
             }
 
-            data[data[offset++]] = value;
+            WriteData(data, value, data[offset++], parameterModes, 2);
 
             return false;
         }

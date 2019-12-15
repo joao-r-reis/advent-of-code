@@ -2,18 +2,18 @@
 using System.Linq;
 using System.Reflection;
 
-using AdventOfCode._8;
+using AdventOfCode._9;
 
 namespace AdventOfCode
 {
     public class Program
     {
-        public const string DefaultTypeToRun = nameof(EightPointFive);
+        public const string DefaultTypeToRun = nameof(NinePointFive);
 
         public static readonly string[] DefaultArgs = new[]
         {
             DefaultTypeToRun,
-            "8\\input.txt"
+            "9\\input.txt"
         };
 
         public static void Main(string[] args)

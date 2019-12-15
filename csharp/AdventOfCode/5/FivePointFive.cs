@@ -13,9 +13,9 @@ namespace AdventOfCode._5
         {
         }
 
-        protected override IIntCodeProgram CreateIntCodeProgram(BlockingCollection<int> input)
+        protected override IIntCodeProgram CreateIntCodeProgram(BlockingCollection<IntCodeValue> input)
         {
-            return IntCodeProgram.NewDay5PointFive(input);
+            return IntCodeProgram.New(input);
         }
     }
 }

@@ -45,16 +45,16 @@ namespace AdventOfCode._7
                 permutations.Select((p, index) => (p, index)),
                 phaseSettings =>
                 {
-                    outputs.Enqueue(ComputeSignal(phaseSettings.Item1, data));
+                    outputs.Enqueue(ComputeSignal(phaseSettings.Item1.Select(IntCodeValue.FromInt).ToList(), data));
                 });
 
             return outputs.Max();
         }
 
-        public int ComputeSignal(IList<int> phaseSettings, int[] data)
+        public int ComputeSignal(IList<IntCodeValue> phaseSettings, int[] data)
         {
             var amplifiers = new IIntCodeProgram[phaseSettings.Count];
-            var firstInput = new BlockingCollection<int>();
+            var firstInput = new BlockingCollection<IntCodeValue>();
 
             for (var i = 0; i < amplifiers.Length; i++)
             {
@@ -63,18 +63,18 @@ namespace AdventOfCode._7
 
                 if (_feedbackLoop && i == amplifiers.Length - 1)
                 {
-                    amplifiers[i] = IntCodeProgram.NewDay7PointFive(input, firstInput);
+                    amplifiers[i] = IntCodeProgram.New(input, firstInput);
                 }
                 else
                 {
-                    amplifiers[i] = IntCodeProgram.NewDay5PointFive(input);
+                    amplifiers[i] = IntCodeProgram.New(input);
                 }
             }
 
             var tasks = amplifiers.Select(program =>
                 Task.Factory.StartNew(() => program.Compute(data.ToArray()), TaskCreationOptions.LongRunning));
 
-            firstInput.Add(0);
+            firstInput.Add(IntCodeValue.FromInt(0));
 
             Task.WhenAll(tasks).Wait(TimeoutMs);
 
@@ -90,7 +90,7 @@ namespace AdventOfCode._7
                 throw new InvalidOperationException("There's still output in the last amplifier.");
             }
 
-            return signal;
+            return (int) signal;
         }
 
         private int[] Parse(StreamReader reader)

@@ -2,20 +2,25 @@
 {
     public class LessThan : BaseCommand
     {
-        public override int OpCode => 7;
-
-        public override bool Process(int[] data, int[] parameterModes, ref int offset)
+        public LessThan(IParameterComputer parameterComputer) : base(parameterComputer)
         {
-            var parameter1 = FetchParameter(data, data[offset++], parameterModes, 0);
-            var parameter2 = FetchParameter(data, data[offset++], parameterModes, 1);
+        }
 
-            var value = 0;
+        public override IntCodeValue OpCode => IntCodeValue.FromInt(7);
+
+        public override bool Process(IIntCodeData data, int[] parameterModes, ref IntCodeValue offset)
+        {
+            var parameter1 = ReadData(data, data[offset++], parameterModes, 0);
+            var parameter2 = ReadData(data, data[offset++], parameterModes, 1);
+            var parsedParameter3 = data[offset++];
+
+            var value = IntCodeValue.FromInt(0);
             if (parameter1 < parameter2)
             {
-                value = 1;
+                value = IntCodeValue.FromInt(1);
             }
 
-            data[data[offset++]] = value;
+            WriteData(data, value, parsedParameter3, parameterModes, 2);
 
             return false;
         }

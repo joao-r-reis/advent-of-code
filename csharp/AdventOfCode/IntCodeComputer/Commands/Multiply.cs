@@ -2,13 +2,17 @@
 {
     public class Multiply : BaseCommand
     {
-        public override int OpCode => 2;
-
-        public override bool Process(int[] data, int[] parameterModes, ref int offset)
+        public Multiply(IParameterComputer parameterComputer) : base(parameterComputer)
         {
-            var parameter1 = FetchParameter(data, data[offset++], parameterModes, 0);
-            var parameter2 = FetchParameter(data, data[offset++], parameterModes, 1);
-            data[data[offset++]] = parameter1 * parameter2;
+        }
+
+        public override IntCodeValue OpCode => IntCodeValue.FromInt(2);
+
+        public override bool Process(IIntCodeData data, int[] parameterModes, ref IntCodeValue offset)
+        {
+            var parameter1 = ReadData(data, data[offset++], parameterModes, 0);
+            var parameter2 = ReadData(data, data[offset++], parameterModes, 1);
+            WriteData(data, parameter1 * parameter2, data[offset++], parameterModes, 2);
             return false;
         }
     }

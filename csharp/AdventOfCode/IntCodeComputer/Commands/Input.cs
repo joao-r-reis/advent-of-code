@@ -4,20 +4,20 @@ namespace AdventOfCode.IntCodeComputer.Commands
 {
     public class Input : BaseCommand
     {
-        private readonly BlockingCollection<int> _input;
+        private readonly BlockingCollection<IntCodeValue> _input;
 
-        public Input(BlockingCollection<int> input)
+        public Input(IParameterComputer computer, BlockingCollection<IntCodeValue> input) : base(computer)
         {
             _input = input;
         }
 
-        public override int OpCode => 3;
+        public override IntCodeValue OpCode => IntCodeValue.FromInt(3);
 
-        public override bool Process(int[] data, int[] parameterModes, ref int offset)
+        public override bool Process(IIntCodeData data, int[] parameterModes, ref IntCodeValue offset)
         {
             var input = _input.Take();
             var value = data[offset++];
-            data[value] = input;
+            WriteData(data, input, value, parameterModes, 0);
             return false;
         }
     }

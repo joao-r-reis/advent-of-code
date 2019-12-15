@@ -4,8 +4,10 @@ namespace AdventOfCode.IntCodeComputer
 {
     public interface IIntCodeProgram
     {
-        BlockingCollection<int> Output { get; }
+        BlockingCollection<IntCodeValue> Output { get; }
 
         int[] Compute(int[] data);
+
+        IIntCodeData Compute(IIntCodeData data);
     }
 }

@@ -27,7 +27,7 @@ namespace AdventOfCode._2
 
         public int ComputeAndGetOutput(int[] data)
         {
-            return IntCodeProgram.NewDay2().Compute(data)[0];
+            return IntCodeProgram.New().Compute(data)[0];
         }
     }
 }

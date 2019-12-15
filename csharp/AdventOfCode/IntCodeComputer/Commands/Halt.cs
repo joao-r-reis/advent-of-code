@@ -2,9 +2,13 @@
 {
     public class Halt : BaseCommand
     {
-        public override int OpCode => 99;
+        public Halt(IParameterComputer parameterComputer) : base(parameterComputer)
+        {
+        }
 
-        public override bool Process(int[] data, int[] parameterModes, ref int offset)
+        public override IntCodeValue OpCode => IntCodeValue.FromInt(99);
+
+        public override bool Process(IIntCodeData data, int[] parameterModes, ref IntCodeValue offset)
         {
             return true;
         }

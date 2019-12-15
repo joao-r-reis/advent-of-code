@@ -5,18 +5,18 @@ using System.Linq;
 
 using AdventOfCode.IntCodeComputer;
 
-namespace AdventOfCode._5
+namespace AdventOfCode._9
 {
-    public class Five : BaseRunnable
+    public class Nine : BaseRunnable
     {
         private readonly int _input;
 
-        public Five(int input)
+        public Nine(int input)
         {
             _input = input;
         }
 
-        public Five() : this(1)
+        public Nine() : this(1)
         {
         }
 
@@ -31,28 +31,23 @@ namespace AdventOfCode._5
             program.Compute(data);
             var output = program.Output;
             var outputCodes = output.ToArray();
-            if (outputCodes.SkipLast(1).Any(code => code != IntCodeValue.FromInt(0)))
+            if (outputCodes.Length != 1)
             {
-                throw new InvalidOperationException("Found non zero output code.");
+                throw new InvalidOperationException("Found zero or more than one values in output: " +
+                                                    string.Join(",", outputCodes.Select(code => code.ToString())));
             }
 
-            if (!outputCodes.Any())
-            {
-                return "null";
-            }
-
-            return outputCodes.Last().ToString();
+            return outputCodes.Single().ToString();
         }
 
         protected virtual IIntCodeProgram CreateIntCodeProgram(BlockingCollection<IntCodeValue> input)
         {
-            return IntCodeProgram.New(input, new BlockingCollection<IntCodeValue>());
+            return IntCodeProgram.New(input);
         }
 
-        private int[] Parse(StreamReader reader)
+        private IIntCodeData Parse(StreamReader reader)
         {
-            var text = reader.ReadToEnd();
-            return text.Split(",").Select(int.Parse).ToArray();
+            return IntCodeData.FromStreamReader(reader);
         }
     }
 }
